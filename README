@@ -1,0 +1,13 @@
+unpack - unpack and print a msgpack[1] archive on stdout
+
+Usage:
+    $ unpack <misc.bin
+    ["foo", {"misc"=>"bar"}]
+
+Also:
+    $ cat misc.bin | unpack -
+    $ unpack misc.bin
+
+[1]: http://msgpack.org/
+
+Copyright (c) 2013 Cédric Deltheil. MIT Licensed.
