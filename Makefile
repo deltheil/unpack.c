@@ -1,8 +1,9 @@
-CFLAGS ?= -Wall -Werror
-LDFLAGS ?= -lmsgpack
+override CFLAGS := -std=c99 -Wall -Werror $(CFLAGS)
+LDLIBS = -lmsgpack
 
 all: unpack
 
-.PHONY: clean
 clean:
-	rm -f unpack.o unpack
+	rm -f *.o unpack
+
+.PHONY: all clean
