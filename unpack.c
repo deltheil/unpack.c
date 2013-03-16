@@ -18,7 +18,8 @@ int main(int argc, char **argv) {
 
   int size;
   char *buf;
-  msgpack_unpacked up;
+  msgpack_unpacker u;
+  msgpack_unpacked obj;
 
   if (!strcmp(g_path, "-"))
     buf = read_stdin(&size);
@@ -29,13 +30,20 @@ int main(int argc, char **argv) {
 
   if (!buf) goto readerr;
 
-  msgpack_unpacked_init(&up);
-  if (msgpack_unpack_next(&up, buf, size, NULL)) {
-    msgpack_object_print(stdout, up.data);
+  msgpack_unpacker_init(&u, size);
+  msgpack_unpacked_init(&obj);
+
+  msgpack_unpacker_reserve_buffer(&u, size);
+  memcpy(msgpack_unpacker_buffer(&u), buf, size);
+  msgpack_unpacker_buffer_consumed(&u, size);
+
+  while (msgpack_unpacker_next(&u, &obj)) {
+    msgpack_object_print(stdout, obj.data);
     putchar('\n');
   }
 
-  msgpack_unpacked_destroy(&up);
+  msgpack_unpacker_destroy(&u);
+  msgpack_unpacked_destroy(&obj);
   free(buf);
 
   return 0;
